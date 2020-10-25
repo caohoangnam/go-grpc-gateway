@@ -4,9 +4,9 @@ import (
 	"context"
 	"database/sql"
 
-	v1 "github.com/go-grpc-gateway/pkg/api/v1"
 	"github.com/golang/protobuf/ptypes"
 	_ "github.com/lib/pq"
+	v1 "github.com/working/go-grpc-gateway/pkg/api/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -58,7 +58,7 @@ func (t *toDoServiceServer) Create(ctx context.Context, req *v1.CreateRequest) (
 	}
 	defer c.Close()
 
-	reminder, err := ptypes.Timestamp(req.ToDo.Reminder)
+	_, err = ptypes.Timestamp(req.ToDo.Reminder)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "reminder field has invalid format-> "+err.Error())
 	}

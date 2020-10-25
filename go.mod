@@ -1,4 +1,4 @@
-module github.com/go-grpc-gateway
+module github.com/working/go-grpc-gateway
 
 go 1.14
 

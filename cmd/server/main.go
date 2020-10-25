@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/go-grpc-gateway/pkg/cmd"
+	"github.com/working/go-grpc-gateway/pkg/cmd"
 )
 
 func main() {

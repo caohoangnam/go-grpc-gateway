@@ -7,7 +7,7 @@ import (
 	"os"
 	"os/signal"
 
-	v1 "github.com/go-grpc-gateway/pkg/api/v1"
+	v1 "github.com/working/go-grpc-gateway/pkg/api/v1"
 	"google.golang.org/grpc"
 )
 
