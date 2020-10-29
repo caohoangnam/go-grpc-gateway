@@ -3,6 +3,34 @@ syntax = "proto3";
 package v1;
 
 import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+	info: {
+		title: "ToDo service";
+		version: "1.0";
+		contact: {
+			name: "go-grpc-gateway";
+			url: "https://github.com/caohoangnam/go-grpc-gateway";
+			email: "caohoangnam114@gmail.com.com";
+        };
+    };
+    schemes: HTTP;
+    consumes: "application/json";
+    produces: "application/json";
+    responses: {
+		key: "404";
+		value: {
+			description: "Returned when the resource does not exist.";
+			schema: {
+				json_schema: {
+					type: STRING;
+				}
+			}
+		}
+	}
+};
 
 message ToDo {
 	int64 Id = 1;
@@ -43,7 +71,7 @@ message UpdateRequest {
 
 message UpdateResponse {
 	string api = 1;
-	int64 id = 2;
+	int64 updated = 2;
 }
 
 message DeleteRequest {
@@ -66,9 +94,40 @@ message ReadAllResponse {
 }
 
 service ToDoService {
-	rpc Create(CreateRequest) returns (CreateResponse);
-//	rpc Read(ReadAllRequest) returns (ReadResponse);
-//	rpc Update(UpdateRequest) returns (UpdateResponse);
-//	rpc Delete(DeleteRequest) returns (DeleteResponse);
-//	rpc ReadAll(ReadAllRequest) returns (ReadAllResponse);
+	rpc Create(CreateRequest) returns (CreateResponse){
+		option (google.api.http) = {
+			post: "/v1/todo"
+			body: "*"
+		};
+	};
+
+	rpc Read(ReadRequest) returns (ReadResponse){
+		option (google.api.http) = {
+			get: "/v1/todo/{id}"
+		};
+	};
+
+	rpc Update(UpdateRequest) returns (UpdateResponse){
+		option (google.api.http) = {
+			put: "/v1/todo/{toDo.Id}"
+			body: "*"
+
+			additional_bindings {
+				patch: "/v1/todo/{toDo.Id}"
+				body: "*"
+			}
+		};
+	};
+
+	rpc Delete(DeleteRequest) returns (DeleteResponse){
+		option (google.api.http) = {
+			delete: "/v1/todo/{id}"
+		};
+	};
+
+	rpc ReadAll(ReadAllRequest) returns (ReadAllResponse){
+		option (google.api.http) = {
+			get: "/v1/todos"
+		};
+	};
 }

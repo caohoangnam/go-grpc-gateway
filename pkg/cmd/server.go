@@ -3,50 +3,52 @@ package cmd
 import (
 	"context"
 	"database/sql"
-	"flag"
 	"fmt"
 
 	_ "github.com/lib/pq"
 	"github.com/working/go-grpc-gateway/pkg/protocol/grpc"
+	"github.com/working/go-grpc-gateway/pkg/protocol/rest"
 	v1 "github.com/working/go-grpc-gateway/pkg/service/v1"
 )
 
-type Config struct {
-	//gRPC is TCP port to listen by gRPC server
-	GRPCPort string
-
-	DBHost   string
-	DBUser   string
-	DBPass   string
-	DBSchema string
-}
+const (
+	GRPCPort = "9090"
+	GRPCHttp = "8080"
+	DBHost   = "localhost"
+	DBPort   = 5432
+	DBUser   = "postgres"
+	DBPass   = ""
+	DBName   = "postgres"
+)
 
 //RunServer run gRPC server and HTTP gateway
 func RunServer() error {
 	ctx := context.Background()
 
-	//get configuration
-	var cfg Config
-	flag.StringVar(&cfg.GRPCPort, "grpc-port", "", "gRPC port to bind")
-	flag.StringVar(&cfg.DBHost, "db-host", "", "Database host")
-	flag.StringVar(&cfg.DBUser, "db-user", "", "Database user")
-	flag.StringVar(&cfg.DBPass, "db-password", "", "Database password")
-	flag.StringVar(&cfg.DBSchema, "db-schema", "", "Database schema")
-	flag.Parse()
-
-	if len(cfg.GRPCPort) == 0 {
-		return fmt.Errorf("invalid TCP port for gRPC server: '%s'", cfg.GRPCPort)
+	if len(GRPCPort) == 0 {
+		return fmt.Errorf("invalid TCP port for gRPC server: '%s'", GRPCPort)
 	}
 
-	dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable",
-		cfg.DBUser, cfg.DBPass, cfg.DBSchema)
+	dbinfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable", DBHost, DBPort,
+		DBUser, DBPass, DBName)
 	db, err := sql.Open("postgres", dbinfo)
 	if err != nil {
 		return fmt.Errorf("failed to open database: %v", err)
 	}
 	defer db.Close()
 
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Successfully connected!")
+
 	v1API := v1.NewToDoServiceServer(db)
 
-	return grpc.RunServer(ctx, v1API, cfg.GRPCPort)
+	// run HTTP gateway
+	go func() {
+		_ = rest.RunServer(ctx, GRPCPort, GRPCHttp)
+	}()
+
+	return grpc.RunServer(ctx, v1API, GRPCPort)
 }
