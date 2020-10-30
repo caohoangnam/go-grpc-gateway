@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	_ "github.com/lib/pq"
+	"github.com/working/go-grpc-gateway/pkg/logger"
 	"github.com/working/go-grpc-gateway/pkg/protocol/grpc"
 	"github.com/working/go-grpc-gateway/pkg/protocol/rest"
 	v1 "github.com/working/go-grpc-gateway/pkg/service/v1"
@@ -19,14 +20,19 @@ const (
 	DBUser   = "postgres"
 	DBPass   = ""
 	DBName   = "postgres"
+
+	//Logger
+	LogLevel      = -1
+	LogTimeFormat = "2006-01-02T15:04:05.999999999Z07:00"
 )
 
 //RunServer run gRPC server and HTTP gateway
 func RunServer() error {
 	ctx := context.Background()
 
-	if len(GRPCPort) == 0 {
-		return fmt.Errorf("invalid TCP port for gRPC server: '%s'", GRPCPort)
+	// initialize logger
+	if err := logger.Init(LogLevel, LogTimeFormat); err != nil {
+		return fmt.Errorf("failed to initialize logger: %v", err)
 	}
 
 	dbinfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable", DBHost, DBPort,

@@ -2,12 +2,13 @@ package grpc
 
 import (
 	"context"
-	"log"
 	"net"
 	"os"
 	"os/signal"
 
 	v1 "github.com/working/go-grpc-gateway/pkg/api/v1"
+	"github.com/working/go-grpc-gateway/pkg/logger"
+	"github.com/working/go-grpc-gateway/pkg/protocol/grpc/middleware"
 	"google.golang.org/grpc"
 )
 
@@ -17,8 +18,14 @@ func RunServer(ctx context.Context, v1API v1.ToDoServiceServer, port string) (er
 		return
 	}
 
+	// gRPC server statup options
+	opts := []grpc.ServerOption{}
+
+	// add middleware
+	opts = middleware.AddLogging(logger.Log, opts)
+
 	//register server
-	server := grpc.NewServer()
+	server := grpc.NewServer(opts...)
 	v1.RegisterToDoServiceServer(server, v1API)
 
 	c := make(chan os.Signal, 1)
@@ -26,7 +33,7 @@ func RunServer(ctx context.Context, v1API v1.ToDoServiceServer, port string) (er
 	go func() {
 		for range c {
 			// sig is a ^C, handle it
-			log.Println("shutting down gRPC server...")
+			logger.Log.Warn("shutting down gRPC server...")
 
 			server.GracefulStop()
 
@@ -35,6 +42,6 @@ func RunServer(ctx context.Context, v1API v1.ToDoServiceServer, port string) (er
 	}()
 
 	// start gRPC server
-	log.Println("starting gRPC server...")
+	logger.Log.Info("starting gRPC server...")
 	return server.Serve(listen)
 }
