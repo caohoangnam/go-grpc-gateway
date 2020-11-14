@@ -22,7 +22,9 @@ type toDoServiceServer struct {
 }
 
 func NewToDoServiceServer(db *sql.DB) v1.ToDoServiceServer {
-	return &toDoServiceServer{db: db}
+	return &toDoServiceServer{
+		db: db,
+	}
 }
 
 // CheckAPI if the API requested by client is supported by server
