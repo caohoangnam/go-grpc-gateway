@@ -35,8 +35,7 @@ func RunServer() error {
 		return fmt.Errorf("failed to initialize logger: %v", err)
 	}
 
-	dbinfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable", DBHost, DBPort,
-		DBUser, DBPass, DBName)
+	dbinfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable", DBHost, DBPort, DBUser, DBPass, DBName)
 	db, err := sql.Open("postgres", dbinfo)
 	if err != nil {
 		return fmt.Errorf("failed to open database: %v", err)
