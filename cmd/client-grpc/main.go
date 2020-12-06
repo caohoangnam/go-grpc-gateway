@@ -94,15 +94,15 @@ func main() {
 	log.Printf("ReadAll result: <%+v>\n\n", res4)
 
 	// Delete
-	req5 := v1.DeleteRequest{
-		Api: apiVersion,
-		Id:  res1.Id,
-	}
-	res5, err := c.Delete(ctx, &req5)
-	if err != nil {
-		log.Fatalf("Delete failed: %v", err)
-	}
-	log.Printf("Delete result: <%+v>\n\n", res5)
+	//	req5 := v1.DeleteRequest{
+	//		Api: apiVersion,
+	//		Id:  res1.Id,
+	//	}
+	//	res5, err := c.Delete(ctx, &req5)
+	//	if err != nil {
+	//		log.Fatalf("Delete failed: %v", err)
+	//	}
+	//	log.Printf("Delete result: <%+v>\n\n", res5)
 
 	// Execution time
 	r := new(big.Int)

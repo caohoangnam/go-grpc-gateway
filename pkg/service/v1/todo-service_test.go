@@ -4,64 +4,77 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net"
 	"testing"
+	"time"
 
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/test/bufconn"
 
+	"github.com/golang/protobuf/ptypes"
+	google_protobuf "github.com/golang/protobuf/ptypes/timestamp"
 	pb "github.com/working/go-grpc-gateway/pkg/api/v1"
 )
 
-type ToDoServiceServer interface{}
-
-func dialer() func(context.Context, string) (net.Conn, error) {
-	//create size connect
-	listener := bufconn.Listen(1024 * 1024)
-
-	server := grpc.NewServer()
-
-	pb.RegisterToDoServiceServer(server, &pb.ToDoServiceServer{})
-
-	go func() {
-		if err := server.Serve(listener); err != nil {
-			log.Fatal(err)
-		}
-	}()
-
-	return func(context.Context, string) (net.Conn, error) {
-		return listener.Dial()
-	}
-}
-
 func TestToDoServiceServer_Create(t *testing.T) {
+	fmt.Println("Successfully connected!")
+	ctx := context.Background()
+
+	tTime := time.Now().In(time.UTC)
+	tReminder, _ := ptypes.TimestampProto(tTime)
+
+	// connect server port
+	conn, err := grpc.Dial(":9090", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+
 	tests := []struct {
 		title       string
 		description string
+		reminder    *google_protobuf.Timestamp
 		res         *pb.CreateResponse
 	}{
 		{
 			"CaoNam",
 			"ABC",
+			tReminder,
+			&pb.CreateResponse{Api: "v1"},
+		},
+		{
+			"CaoNam1",
+			"ABC",
+			tReminder,
+			&pb.CreateResponse{Api: "v1"},
+		},
+		{
+			"CaoNam2",
+			"ABC",
+			tReminder,
+			&pb.CreateResponse{Api: "v1"},
+		},
+		{
+			"CaoNam3",
+			"ABC",
+			tReminder,
+			&pb.CreateResponse{Api: "v1"},
+		},
+		{
+			"CaoNam4",
+			"AAAA",
+			tReminder,
 			&pb.CreateResponse{Api: "v1"},
 		},
 	}
 
-	ctx := context.Background()
-	conn, err := grpc.DialContext(ctx, "", grpc.WithInsecure(), grpc.WithContextDialer(dialer()))
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer conn.Close()
-
 	client := pb.NewToDoServiceClient(conn)
-
 	for _, tt := range tests {
 		t.Run(tt.title, func(t *testing.T) {
 			req := &pb.CreateRequest{
 				Api: "v1",
 				ToDo: &pb.ToDo{
+					Title:       tt.title,
 					Description: tt.description,
+					Reminder:    tt.reminder,
 				},
 			}
 
