@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "ToDo service",
+    "title": "Account service",
     "version": "1.0",
     "contact": {
       "name": "go-grpc-gateway",
@@ -19,9 +19,9 @@
     "application/json"
   ],
   "paths": {
-    "/v1/todo": {
+    "/v1/account": {
       "post": {
-        "operationId": "ToDoService_Create",
+        "operationId": "AccountService_Create",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -54,13 +54,103 @@
           }
         ],
         "tags": [
-          "ToDoService"
+          "AccountService"
         ]
       }
     },
-    "/v1/todo/{id}": {
+    "/v1/account/{account.Id}": {
+      "put": {
+        "operationId": "AccountService_Update",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "account.Id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AccountService"
+        ]
+      },
+      "patch": {
+        "operationId": "AccountService_Update2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateResponse"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "account.Id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1UpdateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AccountService"
+        ]
+      }
+    },
+    "/v1/account/{id}": {
       "get": {
-        "operationId": "ToDoService_Read",
+        "operationId": "AccountService_Read",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -98,176 +188,7 @@
           }
         ],
         "tags": [
-          "ToDoService"
-        ]
-      },
-      "delete": {
-        "operationId": "ToDoService_Delete",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DeleteResponse"
-            }
-          },
-          "404": {
-            "description": "Returned when the resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/runtimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "int64"
-          },
-          {
-            "name": "api",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "ToDoService"
-        ]
-      }
-    },
-    "/v1/todo/{toDo.Id}": {
-      "put": {
-        "operationId": "ToDoService_Update",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateResponse"
-            }
-          },
-          "404": {
-            "description": "Returned when the resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/runtimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "toDo.Id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "int64"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1UpdateRequest"
-            }
-          }
-        ],
-        "tags": [
-          "ToDoService"
-        ]
-      },
-      "patch": {
-        "operationId": "ToDoService_Update2",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateResponse"
-            }
-          },
-          "404": {
-            "description": "Returned when the resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/runtimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "toDo.Id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "int64"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1UpdateRequest"
-            }
-          }
-        ],
-        "tags": [
-          "ToDoService"
-        ]
-      }
-    },
-    "/v1/todos": {
-      "get": {
-        "operationId": "ToDoService_ReadAll",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ReadAllResponse"
-            }
-          },
-          "404": {
-            "description": "Returned when the resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/runtimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "api",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "ToDoService"
+          "AccountService"
         ]
       }
     }
@@ -309,14 +230,43 @@
         }
       }
     },
+    "v1Account": {
+      "type": "object",
+      "properties": {
+        "Id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "Owner": {
+          "type": "string"
+        },
+        "Balance": {
+          "type": "number",
+          "format": "double"
+        },
+        "Currency": {
+          "type": "number",
+          "format": "double"
+        },
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Date and time to reminder"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "v1CreateRequest": {
       "type": "object",
       "properties": {
         "api": {
           "type": "string"
         },
-        "toDo": {
-          "$ref": "#/definitions/v1ToDo",
+        "account": {
+          "$ref": "#/definitions/v1Account",
           "title": "Task entity to add"
         }
       }
@@ -333,60 +283,14 @@
         }
       }
     },
-    "v1DeleteResponse": {
-      "type": "object",
-      "properties": {
-        "api": {
-          "type": "string"
-        },
-        "deleted": {
-          "type": "string",
-          "format": "int64"
-        }
-      }
-    },
-    "v1ReadAllResponse": {
-      "type": "object",
-      "properties": {
-        "api": {
-          "type": "string"
-        },
-        "toDos": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1ToDo"
-          }
-        }
-      }
-    },
     "v1ReadResponse": {
       "type": "object",
       "properties": {
         "api": {
           "type": "string"
         },
-        "toDo": {
-          "$ref": "#/definitions/v1ToDo"
-        }
-      }
-    },
-    "v1ToDo": {
-      "type": "object",
-      "properties": {
-        "Id": {
-          "type": "string",
-          "format": "int64"
-        },
-        "Title": {
-          "type": "string"
-        },
-        "Description": {
-          "type": "string"
-        },
-        "reminder": {
-          "type": "string",
-          "format": "date-time",
-          "title": "Date and time to reminder"
+        "account": {
+          "$ref": "#/definitions/v1Account"
         }
       }
     },
@@ -396,8 +300,8 @@
         "api": {
           "type": "string"
         },
-        "toDo": {
-          "$ref": "#/definitions/v1ToDo"
+        "account": {
+          "$ref": "#/definitions/v1Account"
         }
       }
     },
@@ -407,7 +311,7 @@
         "api": {
           "type": "string"
         },
-        "updated": {
+        "updatedAt": {
           "type": "string",
           "format": "int64"
         }

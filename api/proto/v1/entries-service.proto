@@ -8,13 +8,13 @@ import "protoc-gen-swagger/options/annotations.proto";
 
 option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
 	info: {
-		title: "ToDo service";
+		title: "Account service";
 		version: "1.0";
 		contact: {
 			name: "go-grpc-gateway";
 			url: "https://github.com/caohoangnam/go-grpc-gateway";
 			email: "caohoangnam114@gmail.com";
-        };
+	};
     };
     schemes: HTTP;
     consumes: "application/json";
@@ -32,25 +32,25 @@ option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
 	}
 };
 
-message ToDo {
+message Entries {
 	int64 Id = 1;
-	string Title = 2;
-	string Description = 3;
+	string AccountId = 2;
+	double Amount = 3;
 	
 	//Date and time to reminder
-	google.protobuf.Timestamp reminder = 4;
+	google.protobuf.Timestamp CreatedAt = 5;
+	google.protobuf.Timestamp UpdatedAt = 6;
 }
 
 message CreateRequest {
 	string api = 1;
 
-	// Task entity to add
-	ToDo toDo = 2;
+	//Task entity to add
+	Entries entries = 2;
 }
 
 message CreateResponse {
 	string api = 1;
-
 	int64 id = 2;
 }
 
@@ -61,73 +61,41 @@ message ReadRequest {
 
 message ReadResponse {
 	string api = 1;
-	ToDo toDo = 2;
+	Entries entries = 2;
 }
 
 message UpdateRequest {
 	string api = 1;
-	ToDo toDo = 2;
+	Entries entries = 2;
 }
 
 message UpdateResponse {
 	string api = 1;
-	int64 updated = 2;
+	int64 updatedAt = 2;
 }
 
-message DeleteRequest {
-	string api = 1;
-	int64 id =2;
-}
-
-message DeleteResponse {
-	string api = 1;
-	int64 deleted = 2;
-}
-
-message ReadAllRequest {
-	string api = 1;
-}
-
-message ReadAllResponse {
-	string api = 1;
-	repeated ToDo toDos = 2;
-}
-
-service ToDoService {
+service EntriesService {
 	rpc Create(CreateRequest) returns (CreateResponse){
 		option (google.api.http) = {
-			post: "/v1/todo"
+			post: "/v1/entries"
 			body: "*"
 		};
 	};
 
 	rpc Read(ReadRequest) returns (ReadResponse){
 		option (google.api.http) = {
-			get: "/v1/todo/{id}"
+			get: "/v1/entries/{id}"
 		};
 	};
 
 	rpc Update(UpdateRequest) returns (UpdateResponse){
 		option (google.api.http) = {
-			put: "/v1/todo/{toDo.Id}"
+			put: "/v1/entries/{entries.Id}"
 			body: "*"
-
 			additional_bindings {
-				patch: "/v1/todo/{toDo.Id}"
+				patch: "/v1/entries/{entries.Id}"
 				body: "*"
 			}
-		};
-	};
-
-	rpc Delete(DeleteRequest) returns (DeleteResponse){
-		option (google.api.http) = {
-			delete: "/v1/todo/{id}"
-		};
-	};
-
-	rpc ReadAll(ReadAllRequest) returns (ReadAllResponse){
-		option (google.api.http) = {
-			get: "/v1/todos"
 		};
 	};
 }
