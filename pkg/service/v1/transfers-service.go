@@ -11,10 +11,6 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-const (
-	apiVersion = "v1"
-)
-
 type transfersServiceServer struct {
 	db *sql.DB
 }
@@ -57,17 +53,35 @@ func (t *transfersServiceServer) Create(ctx context.Context, req *v1.CreateTrans
 	}
 	defer db.Close()
 
-	lastInsertId := 0
-	sql := `INSERT INTO transfers(from_account_id, to_account_id, amount) VALUES($1, $2) RETURNING id`
-	err = db.QueryRowContext(ctx, sql, req.Transfers.FromAccountId, req.Transfers.ToAccountId, req.Transfers.Amount).Scan(&lastInsertId)
+	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback()
+
+	lastInsertId, err := t.CreateTx(req, tx)
+	if err != nil {
+		tx.Rollback()
 		return nil, status.Error(codes.Unknown, "failed to insert into Transfers-> "+err.Error())
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		return nil, err
 	}
 
 	return &v1.CreateTransfersResponse{
 		Api: apiVersion,
 		Id:  int64(lastInsertId),
 	}, nil
+}
+
+func (t *transfersServiceServer) CreateTx(req *v1.CreateTransfersRequest, tx *sql.Tx) (int, error) {
+	var lastId int
+	sql := `INSERT INTO transfers(from_account_id, to_account_id, amount) VALUES($1, $2) RETURNING id`
+	err := db.QueryRowContext(sql, req.Transfers.FromAccountId, req.Transfers.ToAccountId, req.Transfers.Amount).Scan(&lastInsertId)
+	return lastId, err
 }
 
 func (t *transfersServiceServer) Read(ctx context.Context, req *v1.ReadTransfersRequest) (*v1.ReadTransfersResponse, error) {

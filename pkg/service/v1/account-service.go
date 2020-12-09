@@ -58,17 +58,35 @@ func (t *accountServiceServer) Create(ctx context.Context, req *v1.CreateAccount
 	}
 	defer db.Close()
 
-	lastInsertId := 0
-	sql := `INSERT INTO accounts(owner, balance, currency) VALUES($1, $2, $3) RETURNING id`
-	err = db.QueryRowContext(ctx, sql, req.Account.Owner, req.Account.Balance, req.Account.Currency).Scan(&lastInsertId)
+	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
-		return nil, status.Error(codes.Unknown, "failed to insert into Account-> "+err.Error())
+		return nil, err
+	}
+	defer tx.Rollback()
+
+	lastInsertId, err := t.CreateTx(req, tx)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		return nil, err
 	}
 
 	return &v1.CreateAccountResponse{
 		Api: apiVersion,
 		Id:  int64(lastInsertId),
 	}, nil
+}
+
+func (t *accountServiceServer) CreateTx(req *v1.CreateAccountRequest, tx *sql.Tx) (int, error) {
+	var lastId int
+	sql := `INSERT INTO accounts(owner, balance, currency) VALUES($1, $2, $3) RETURNING id`
+	err := tx.QueryRow(sql, req.Account.Owner, req.Account.Balance, req.Account.Currency).Scan(&lastId)
+	return lastId, err
 }
 
 func (t *accountServiceServer) Read(ctx context.Context, req *v1.ReadAccountRequest) (*v1.ReadAccountResponse, error) {

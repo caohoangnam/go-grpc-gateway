@@ -12,10 +12,6 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-const (
-	apiVersion = "v1"
-)
-
 type entriesServiceServer struct {
 	db *sql.DB
 }
@@ -58,17 +54,35 @@ func (t *entriesServiceServer) Create(ctx context.Context, req *v1.CreateEntries
 	}
 	defer db.Close()
 
-	lastInsertId := 0
-	sql := `INSERT INTO entries(account_id, amount) VALUES($1, $2) RETURNING id`
-	err = db.QueryRowContext(ctx, sql, req.Entries.AccountId, req.Entries.Amount).Scan(&lastInsertId)
+	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback()
+
+	lastInsertId, err := t.CreateTx(req, tx)
+	if err != nil {
+		tx.Rollback()
 		return nil, status.Error(codes.Unknown, "failed to insert into Entries-> "+err.Error())
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		return nil, err
 	}
 
 	return &v1.CreateEntriesResponse{
 		Api: apiVersion,
 		Id:  int64(lastInsertId),
 	}, nil
+}
+
+func (t *entriesServiceServer) CreateTx(req *v1.CreateEntriesRequest, tx *sql.Tx) (int, error) {
+	var lastId int
+	sql := `INSERT INTO entries(account_id, amount) VALUES($1, $2) RETURNING id`
+	err := db.QueryRow(sql, req.Entries.AccountId, req.Entries.Amount).Scan(&lastId)
+	return lastId, err
 }
 
 func (t *entriesServiceServer) Read(ctx context.Context, req *v1.ReadEntriesRequest) (*v1.ReadEntriesResponse, error) {

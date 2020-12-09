@@ -36,7 +36,7 @@ message Account {
 	int64 Id = 1;
 	string Owner = 2;
 	double Balance = 3;
-	double Currency = 4;
+	string Currency = 4;
 	
 	//Date and time to reminder
 	google.protobuf.Timestamp CreatedAt = 5;
@@ -72,7 +72,7 @@ message UpdateAccountRequest {
 
 message UpdateAccountResponse {
 	string api = 1;
-	int64 updatedAt = 2;
+	int64 updated = 2;
 }
 
 service AccountService {

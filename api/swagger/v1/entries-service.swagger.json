@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Account service",
+    "title": "Entries service",
     "version": "1.0",
     "contact": {
       "name": "go-grpc-gateway",
@@ -307,7 +307,7 @@
         "api": {
           "type": "string"
         },
-        "updatedAt": {
+        "updated": {
           "type": "string",
           "format": "int64"
         }

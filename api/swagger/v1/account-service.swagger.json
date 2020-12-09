@@ -245,8 +245,7 @@
           "format": "double"
         },
         "Currency": {
-          "type": "number",
-          "format": "double"
+          "type": "string"
         },
         "CreatedAt": {
           "type": "string",
@@ -311,7 +310,7 @@
         "api": {
           "type": "string"
         },
-        "updatedAt": {
+        "updated": {
           "type": "string",
           "format": "int64"
         }
