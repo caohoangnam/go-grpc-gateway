@@ -6,6 +6,7 @@ CREATE TABLE entries (
   "account_id" bigint NOT NULL,
   "amount" bigint NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
+  "updated_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 -- +goose Down
