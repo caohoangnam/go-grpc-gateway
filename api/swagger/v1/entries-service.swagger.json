@@ -26,7 +26,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1CreateResponse"
+              "$ref": "#/definitions/v1CreateEntriesResponse"
             }
           },
           "404": {
@@ -49,7 +49,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1CreateRequest"
+              "$ref": "#/definitions/v1CreateEntriesRequest"
             }
           }
         ],
@@ -65,7 +65,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UpdateResponse"
+              "$ref": "#/definitions/v1UpdateEntriesResponse"
             }
           },
           "404": {
@@ -95,7 +95,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1UpdateRequest"
+              "$ref": "#/definitions/v1UpdateEntriesRequest"
             }
           }
         ],
@@ -109,7 +109,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UpdateResponse"
+              "$ref": "#/definitions/v1UpdateEntriesResponse"
             }
           },
           "404": {
@@ -139,7 +139,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1UpdateRequest"
+              "$ref": "#/definitions/v1UpdateEntriesRequest"
             }
           }
         ],
@@ -155,7 +155,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ReadResponse"
+              "$ref": "#/definitions/v1ReadEntriesResponse"
             }
           },
           "404": {
@@ -230,7 +230,7 @@
         }
       }
     },
-    "v1CreateRequest": {
+    "v1CreateEntriesRequest": {
       "type": "object",
       "properties": {
         "api": {
@@ -242,7 +242,7 @@
         }
       }
     },
-    "v1CreateResponse": {
+    "v1CreateEntriesResponse": {
       "type": "object",
       "properties": {
         "api": {
@@ -279,7 +279,7 @@
         }
       }
     },
-    "v1ReadResponse": {
+    "v1ReadEntriesResponse": {
       "type": "object",
       "properties": {
         "api": {
@@ -290,7 +290,7 @@
         }
       }
     },
-    "v1UpdateRequest": {
+    "v1UpdateEntriesRequest": {
       "type": "object",
       "properties": {
         "api": {
@@ -301,7 +301,7 @@
         }
       }
     },
-    "v1UpdateResponse": {
+    "v1UpdateEntriesResponse": {
       "type": "object",
       "properties": {
         "api": {

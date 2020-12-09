@@ -26,7 +26,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1CreateResponse"
+              "$ref": "#/definitions/v1CreateAccountResponse"
             }
           },
           "404": {
@@ -49,7 +49,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1CreateRequest"
+              "$ref": "#/definitions/v1CreateAccountRequest"
             }
           }
         ],
@@ -65,7 +65,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UpdateResponse"
+              "$ref": "#/definitions/v1UpdateAccountResponse"
             }
           },
           "404": {
@@ -95,7 +95,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1UpdateRequest"
+              "$ref": "#/definitions/v1UpdateAccountRequest"
             }
           }
         ],
@@ -109,7 +109,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UpdateResponse"
+              "$ref": "#/definitions/v1UpdateAccountResponse"
             }
           },
           "404": {
@@ -139,7 +139,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1UpdateRequest"
+              "$ref": "#/definitions/v1UpdateAccountRequest"
             }
           }
         ],
@@ -155,7 +155,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ReadResponse"
+              "$ref": "#/definitions/v1ReadAccountResponse"
             }
           },
           "404": {
@@ -259,7 +259,7 @@
         }
       }
     },
-    "v1CreateRequest": {
+    "v1CreateAccountRequest": {
       "type": "object",
       "properties": {
         "api": {
@@ -271,7 +271,7 @@
         }
       }
     },
-    "v1CreateResponse": {
+    "v1CreateAccountResponse": {
       "type": "object",
       "properties": {
         "api": {
@@ -283,7 +283,7 @@
         }
       }
     },
-    "v1ReadResponse": {
+    "v1ReadAccountResponse": {
       "type": "object",
       "properties": {
         "api": {
@@ -294,7 +294,7 @@
         }
       }
     },
-    "v1UpdateRequest": {
+    "v1UpdateAccountRequest": {
       "type": "object",
       "properties": {
         "api": {
@@ -305,7 +305,7 @@
         }
       }
     },
-    "v1UpdateResponse": {
+    "v1UpdateAccountResponse": {
       "type": "object",
       "properties": {
         "api": {

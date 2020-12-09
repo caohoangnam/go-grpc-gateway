@@ -26,7 +26,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1CreateResponse"
+              "$ref": "#/definitions/v1CreateTransactionResponse"
             }
           },
           "404": {
@@ -49,7 +49,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1CreateRequest"
+              "$ref": "#/definitions/v1CreateTransactionRequest"
             }
           }
         ],
@@ -65,7 +65,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ReadResponse"
+              "$ref": "#/definitions/v1ReadTransactionResponse"
             }
           },
           "404": {
@@ -95,96 +95,6 @@
             "in": "query",
             "required": false,
             "type": "string"
-          }
-        ],
-        "tags": [
-          "TransactionService"
-        ]
-      }
-    },
-    "/v1/transaction/{transaction.Id}": {
-      "put": {
-        "operationId": "TransactionService_Update",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateResponse"
-            }
-          },
-          "404": {
-            "description": "Returned when the resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/runtimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "transaction.Id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "int64"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1UpdateRequest"
-            }
-          }
-        ],
-        "tags": [
-          "TransactionService"
-        ]
-      },
-      "patch": {
-        "operationId": "TransactionService_Update2",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1UpdateResponse"
-            }
-          },
-          "404": {
-            "description": "Returned when the resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/runtimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "transaction.Id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "int64"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/v1UpdateRequest"
-            }
           }
         ],
         "tags": [
@@ -230,7 +140,7 @@
         }
       }
     },
-    "v1CreateRequest": {
+    "v1CreateTransactionRequest": {
       "type": "object",
       "properties": {
         "api": {
@@ -242,7 +152,7 @@
         }
       }
     },
-    "v1CreateResponse": {
+    "v1CreateTransactionResponse": {
       "type": "object",
       "properties": {
         "api": {
@@ -254,7 +164,7 @@
         }
       }
     },
-    "v1ReadResponse": {
+    "v1ReadTransactionResponse": {
       "type": "object",
       "properties": {
         "api": {
@@ -290,29 +200,6 @@
         "UpdatedAt": {
           "type": "string",
           "format": "date-time"
-        }
-      }
-    },
-    "v1UpdateRequest": {
-      "type": "object",
-      "properties": {
-        "api": {
-          "type": "string"
-        },
-        "transaction": {
-          "$ref": "#/definitions/v1Transaction"
-        }
-      }
-    },
-    "v1UpdateResponse": {
-      "type": "object",
-      "properties": {
-        "api": {
-          "type": "string"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "int64"
         }
       }
     }

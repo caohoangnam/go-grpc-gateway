@@ -34,7 +34,7 @@ var _ = descriptor.ForMessage
 var _ = metadata.Join
 
 func request_EntriesService_Create_0(ctx context.Context, marshaler runtime.Marshaler, client EntriesServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq CreateRequest
+	var protoReq CreateEntriesRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -51,7 +51,7 @@ func request_EntriesService_Create_0(ctx context.Context, marshaler runtime.Mars
 }
 
 func local_request_EntriesService_Create_0(ctx context.Context, marshaler runtime.Marshaler, server EntriesServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq CreateRequest
+	var protoReq CreateEntriesRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -72,7 +72,7 @@ var (
 )
 
 func request_EntriesService_Read_0(ctx context.Context, marshaler runtime.Marshaler, client EntriesServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ReadRequest
+	var protoReq ReadEntriesRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -106,7 +106,7 @@ func request_EntriesService_Read_0(ctx context.Context, marshaler runtime.Marsha
 }
 
 func local_request_EntriesService_Read_0(ctx context.Context, marshaler runtime.Marshaler, server EntriesServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ReadRequest
+	var protoReq ReadEntriesRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -140,7 +140,7 @@ func local_request_EntriesService_Read_0(ctx context.Context, marshaler runtime.
 }
 
 func request_EntriesService_Update_0(ctx context.Context, marshaler runtime.Marshaler, client EntriesServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq UpdateRequest
+	var protoReq UpdateEntriesRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -175,7 +175,7 @@ func request_EntriesService_Update_0(ctx context.Context, marshaler runtime.Mars
 }
 
 func local_request_EntriesService_Update_0(ctx context.Context, marshaler runtime.Marshaler, server EntriesServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq UpdateRequest
+	var protoReq UpdateEntriesRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -210,7 +210,7 @@ func local_request_EntriesService_Update_0(ctx context.Context, marshaler runtim
 }
 
 func request_EntriesService_Update_1(ctx context.Context, marshaler runtime.Marshaler, client EntriesServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq UpdateRequest
+	var protoReq UpdateEntriesRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -245,7 +245,7 @@ func request_EntriesService_Update_1(ctx context.Context, marshaler runtime.Mars
 }
 
 func local_request_EntriesService_Update_1(ctx context.Context, marshaler runtime.Marshaler, server EntriesServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq UpdateRequest
+	var protoReq UpdateEntriesRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)

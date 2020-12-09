@@ -43,60 +43,39 @@ message Transaction {
 	google.protobuf.Timestamp UpdatedAt = 6;
 }
 
-message CreateRequest {
+message CreateTransactionRequest {
 	string api = 1;
 
 	//Task entity to add
 	Transaction transaction = 2;
 }
 
-message CreateResponse {
+message CreateTransactionResponse {
 	string api = 1;
 	int64 id = 2;
 }
 
-message ReadRequest {
+message ReadTransactionRequest {
 	string api = 1;
 	int64 id = 2;
 }
 
-message ReadResponse {
+message ReadTransactionResponse {
 	string api = 1;
 	Transaction transaction = 2;
-}
-
-message UpdateRequest {
-	string api = 1;
-	Transaction transaction = 2;
-}
-
-message UpdateResponse {
-	string api = 1;
-	int64 updatedAt = 2;
 }
 
 service TransactionService {
-	rpc Create(CreateRequest) returns (CreateResponse){
+	rpc Create(CreateTransactionRequest) returns (CreateTransactionResponse){
 		option (google.api.http) = {
 			post: "/v1/transaction"
 			body: "*"
 		};
 	};
 
-	rpc Read(ReadRequest) returns (ReadResponse){
+	rpc Read(ReadTransactionRequest) returns (ReadTransactionResponse){
 		option (google.api.http) = {
 			get: "/v1/transaction/{id}"
-		};
-	};
-
-	rpc Update(UpdateRequest) returns (UpdateResponse){
-		option (google.api.http) = {
-			put: "/v1/transaction/{transaction.Id}"
-			body: "*"
-			additional_bindings {
-				patch: "/v1/transaction/{transaction.Id}"
-				body: "*"
-			}
 		};
 	};
 }
