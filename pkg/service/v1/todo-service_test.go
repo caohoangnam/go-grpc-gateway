@@ -2,6 +2,7 @@ package v1
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"testing"
@@ -21,8 +22,12 @@ func TestToDoServiceServer_Create(t *testing.T) {
 	tTime := time.Now().In(time.UTC)
 	tReminder, _ := ptypes.TimestampProto(tTime)
 
+	address := flag.String("server", "", "gRPC server in format host:port")
+	flag.Parse()
+
 	// connect server port
-	conn, err := grpc.Dial(":9090", grpc.WithInsecure())
+	//	conn, err := grpc.Dial(":9090", grpc.WithInsecure())
+	conn, err := grpc.Dial(*address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
