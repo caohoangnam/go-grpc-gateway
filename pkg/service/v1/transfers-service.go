@@ -80,7 +80,7 @@ func (t *transfersServiceServer) Create(ctx context.Context, req *v1.CreateTrans
 func (t *transfersServiceServer) CreateTx(req *v1.CreateTransfersRequest, tx *sql.Tx) (int, error) {
 	var lastId int
 	sql := `INSERT INTO transfers(from_account_id, to_account_id, amount) VALUES($1, $2) RETURNING id`
-	err := db.QueryRowContext(sql, req.Transfers.FromAccountId, req.Transfers.ToAccountId, req.Transfers.Amount).Scan(&lastInsertId)
+	err := tx.QueryRow(sql, req.Transfers.FromAccountId, req.Transfers.ToAccountId, req.Transfers.Amount).Scan(&lastId)
 	return lastId, err
 }
 

@@ -81,7 +81,7 @@ func (t *entriesServiceServer) Create(ctx context.Context, req *v1.CreateEntries
 func (t *entriesServiceServer) CreateTx(req *v1.CreateEntriesRequest, tx *sql.Tx) (int, error) {
 	var lastId int
 	sql := `INSERT INTO entries(account_id, amount) VALUES($1, $2) RETURNING id`
-	err := db.QueryRow(sql, req.Entries.AccountId, req.Entries.Amount).Scan(&lastId)
+	err := tx.QueryRow(sql, req.Entries.AccountId, req.Entries.Amount).Scan(&lastId)
 	return lastId, err
 }
 
