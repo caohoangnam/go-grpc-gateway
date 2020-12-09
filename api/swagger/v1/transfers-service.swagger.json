@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Transaction service",
+    "title": "Transfers service",
     "version": "1.0",
     "contact": {
       "name": "go-grpc-gateway",
@@ -19,14 +19,14 @@
     "application/json"
   ],
   "paths": {
-    "/v1/transaction": {
+    "/v1/transfers": {
       "post": {
-        "operationId": "TransactionService_Create",
+        "operationId": "TransfersService_Create",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1CreateTransactionResponse"
+              "$ref": "#/definitions/v1CreateTransfersResponse"
             }
           },
           "404": {
@@ -49,23 +49,23 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1CreateTransactionRequest"
+              "$ref": "#/definitions/v1CreateTransfersRequest"
             }
           }
         ],
         "tags": [
-          "TransactionService"
+          "TransfersService"
         ]
       }
     },
-    "/v1/transaction/{id}": {
+    "/v1/transfers/{id}": {
       "get": {
-        "operationId": "TransactionService_Read",
+        "operationId": "TransfersService_Read",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1ReadTransactionResponse"
+              "$ref": "#/definitions/v1ReadTransfersResponse"
             }
           },
           "404": {
@@ -98,7 +98,7 @@
           }
         ],
         "tags": [
-          "TransactionService"
+          "TransfersService"
         ]
       }
     }
@@ -140,19 +140,19 @@
         }
       }
     },
-    "v1CreateTransactionRequest": {
+    "v1CreateTransfersRequest": {
       "type": "object",
       "properties": {
         "api": {
           "type": "string"
         },
-        "transaction": {
-          "$ref": "#/definitions/v1Transaction",
+        "transfers": {
+          "$ref": "#/definitions/v1Transfers",
           "title": "Task entity to add"
         }
       }
     },
-    "v1CreateTransactionResponse": {
+    "v1CreateTransfersResponse": {
       "type": "object",
       "properties": {
         "api": {
@@ -164,18 +164,18 @@
         }
       }
     },
-    "v1ReadTransactionResponse": {
+    "v1ReadTransfersResponse": {
       "type": "object",
       "properties": {
         "api": {
           "type": "string"
         },
-        "transaction": {
-          "$ref": "#/definitions/v1Transaction"
+        "transfers": {
+          "$ref": "#/definitions/v1Transfers"
         }
       }
     },
-    "v1Transaction": {
+    "v1Transfers": {
       "type": "object",
       "properties": {
         "Id": {
