@@ -12,7 +12,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-func RunServer(ctx context.Context, v1API v1.ToDoServiceServer, port string) (err error) {
+func RunServer(ctx context.Context, v1API v1.ToDoServiceServer, v1APIAccount v1.AccountServiceServer, v1APIEntries v1.EntriesServiceServer, v1APITransfers v1.TransfersServiceServer, port string) (err error) {
 	listen, err := net.Listen("tcp", ":"+port)
 	if err != nil {
 		return
@@ -27,6 +27,9 @@ func RunServer(ctx context.Context, v1API v1.ToDoServiceServer, port string) (er
 	//register server
 	server := grpc.NewServer(opts...)
 	v1.RegisterToDoServiceServer(server, v1API)
+	v1.RegisterAccountServiceServer(server, v1APIAccount)
+	v1.RegisterEntriesServiceServer(server, v1APIEntries)
+	v1.RegisterTransfersServiceServer(server, v1APITransfers)
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)

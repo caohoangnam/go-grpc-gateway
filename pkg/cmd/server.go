@@ -49,11 +49,14 @@ func RunServer() error {
 	fmt.Println("Successfully connected!")
 
 	v1API := v1.NewToDoServiceServer(db)
+	v1APIAccount := v1.NewAccountServiceServer(db)
+	v1APIEntries := v1.NewEntriesServiceServer(db)
+	v1APITransfers := v1.NewTransfersServiceServer(db)
 
 	// run HTTP gateway
 	go func() {
 		_ = rest.RunServer(ctx, GRPCPort, GRPCHttp)
 	}()
 
-	return grpc.RunServer(ctx, v1API, GRPCPort)
+	return grpc.RunServer(ctx, v1API, v1APIAccount, v1APIEntries, v1APITransfers, GRPCPort)
 }

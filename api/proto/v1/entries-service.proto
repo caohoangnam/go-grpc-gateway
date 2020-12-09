@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+	info: {
+		title: "Entries service";
+		version: "1.0";
+		contact: {
+			name: "go-grpc-gateway";
+			url: "https://github.com/caohoangnam/go-grpc-gateway";
+			email: "caohoangnam114@gmail.com";
+	};
+    };
+    schemes: HTTP;
+    consumes: "application/json";
+    produces: "application/json";
+    responses: {
+		key: "404";
+		value: {
+			description: "Returned when the resource does not exist.";
+			schema: {
+				json_schema: {
+					type: STRING;
+				}
+			}
+		}
+	}
+};
+
+message Entries {
+	int64 Id = 1;
+	string AccountId = 2;
+	double Amount = 3;
+	
+	//Date and time to reminder
+	google.protobuf.Timestamp CreatedAt = 5;
+	google.protobuf.Timestamp UpdatedAt = 6;
+}
+
+message CreateEntriesRequest {
+	string api = 1;
+
+	//Task entity to add
+	Entries entries = 2;
+}
+
+message CreateEntriesResponse {
+	string api = 1;
+	int64 id = 2;
+}
+
+message ReadEntriesRequest {
+	string api = 1;
+	int64 id = 2;
+}
+
+message ReadEntriesResponse {
+	string api = 1;
+	Entries entries = 2;
+}
+
+message UpdateEntriesRequest {
+	string api = 1;
+	Entries entries = 2;
+}
+
+message UpdateEntriesResponse {
+	string api = 1;
+	int64 updated = 2;
+}
+
+service EntriesService {
+	rpc Create(CreateEntriesRequest) returns (CreateEntriesResponse){
+		option (google.api.http) = {
+			post: "/v1/entries"
+			body: "*"
+		};
+	};
+
+	rpc Read(ReadEntriesRequest) returns (ReadEntriesResponse){
+		option (google.api.http) = {
+			get: "/v1/entries/{id}"
+		};
+	};
+
+	rpc Update(UpdateEntriesRequest) returns (UpdateEntriesResponse){
+		option (google.api.http) = {
+			put: "/v1/entries/{entries.Id}"
+			body: "*"
+			additional_bindings {
+				patch: "/v1/entries/{entries.Id}"
+				body: "*"
+			}
+		};
+	};
+}

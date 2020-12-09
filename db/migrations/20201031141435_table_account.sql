@@ -7,6 +7,7 @@ CREATE TABLE accounts (
   "balance" bigint NOT NULL,
   "currency" varchar NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
+  "updated_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 -- +goose Down

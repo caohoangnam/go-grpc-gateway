@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+	info: {
+		title: "Transfers service";
+		version: "1.0";
+		contact: {
+			name: "go-grpc-gateway";
+			url: "https://github.com/caohoangnam/go-grpc-gateway";
+			email: "caohoangnam114@gmail.com";
+        };
+    };
+    schemes: HTTP;
+    consumes: "application/json";
+    produces: "application/json";
+    responses: {
+		key: "404";
+		value: {
+			description: "Returned when the resource does not exist.";
+			schema: {
+				json_schema: {
+					type: STRING;
+				}
+			}
+		}
+	}
+};
+
+message Transfers {
+	int64 Id = 1;
+	string FromAccountId = 2;
+	string ToAccountId = 3;
+	double Amount = 4;
+	
+	//Date and time to reminder
+	google.protobuf.Timestamp CreatedAt = 5;
+	google.protobuf.Timestamp UpdatedAt = 6;
+}
+
+message CreateTransfersRequest {
+	string api = 1;
+
+	//Task entity to add
+	Transfers transfers = 2;
+}
+
+message CreateTransfersResponse {
+	string api = 1;
+	int64 id = 2;
+}
+
+message ReadTransfersRequest {
+	string api = 1;
+	int64 id = 2;
+}
+
+message ReadTransfersResponse {
+	string api = 1;
+	Transfers transfers = 2;
+}
+
+service TransfersService {
+	rpc Create(CreateTransfersRequest) returns (CreateTransfersResponse){
+		option (google.api.http) = {
+			post: "/v1/transfers"
+			body: "*"
+		};
+	};
+
+	rpc Read(ReadTransfersRequest) returns (ReadTransfersResponse){
+		option (google.api.http) = {
+			get: "/v1/transfers/{id}"
+		};
+	};
+}

@@ -13,10 +13,6 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-const (
-	apiVersion = "v1"
-)
-
 type toDoServiceServer struct {
 	db *sql.DB
 }
