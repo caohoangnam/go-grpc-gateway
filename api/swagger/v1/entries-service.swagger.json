@@ -262,7 +262,8 @@
           "format": "int64"
         },
         "AccountId": {
-          "type": "string"
+          "type": "string",
+          "format": "int64"
         },
         "Amount": {
           "type": "number",

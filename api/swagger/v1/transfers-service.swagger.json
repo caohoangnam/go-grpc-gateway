@@ -183,10 +183,12 @@
           "format": "int64"
         },
         "FromAccountId": {
-          "type": "string"
+          "type": "string",
+          "format": "int64"
         },
         "ToAccountId": {
-          "type": "string"
+          "type": "string",
+          "format": "int64"
         },
         "Amount": {
           "type": "number",
