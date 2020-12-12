@@ -34,7 +34,7 @@ option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
 
 message Entries {
 	int64 Id = 1;
-	string AccountId = 2;
+	int64 AccountId = 2;
 	double Amount = 3;
 	
 	//Date and time to reminder

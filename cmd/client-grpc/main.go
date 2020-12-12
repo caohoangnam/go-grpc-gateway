@@ -32,25 +32,54 @@ func main() {
 	defer conn.Close()
 
 	//	c := v1.NewToDoServiceClient(conn)
-	account := v1.NewAccountServiceClient(conn)
+	//	account := v1.NewAccountServiceClient(conn)
+	transfers := v1.NewTransfersServiceClient(conn)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	//Create Account
-	reqAcc := v1.CreateAccountRequest{
+	// Trnsaction trasfers -> entries -> account
+	reqTransfers := v1.CreateTransfersRequest{
 		Api: apiVersion,
-		Account: &v1.Account{
-			Owner:    "HoangA",
-			Balance:  2000000,
-			Currency: "Dollar",
+		Transfers: &v1.Transfers{
+			FromAccountId: 1,
+			ToAccountId:   2,
+			Amount:        10,
 		},
 	}
-	resAcc, err := account.Create(ctx, &reqAcc)
+	resTransfers, err := transfers.Create(ctx, &reqTransfers)
 	if err != nil {
 		log.Fatalf("Create failed: %v", err)
 	}
-	log.Printf("Create result: <%+v>\n\n", resAcc)
+	log.Printf("Create result: <%+v>\n\n", resTransfers)
+
+	reqTransfers2 := v1.CreateTransfersRequest{
+		Api: apiVersion,
+		Transfers: &v1.Transfers{
+			FromAccountId: 2,
+			ToAccountId:   1,
+			Amount:        40,
+		},
+	}
+	resTransfers2, err := transfers.Create(ctx, &reqTransfers2)
+	if err != nil {
+		log.Fatalf("Create failed: %v", err)
+	}
+	log.Printf("Create result: <%+v>\n\n", resTransfers2)
+	//Create Account
+	//	reqAcc := v1.CreateAccountRequest{
+	//		Api: apiVersion,
+	//		Account: &v1.Account{
+	//			Owner:    "HoangA",
+	//			Balance:  2000000,
+	//			Currency: "Dollar",
+	//		},
+	//	}
+	//	resAcc, err := account.Create(ctx, &reqAcc)
+	//	if err != nil {
+	//		log.Fatalf("Create failed: %v", err)
+	//	}
+	//	log.Printf("Create result: <%+v>\n\n", resAcc)
 
 	//	t := time.Now().In(time.UTC)
 	//	reminder, _ := ptypes.TimestampProto(t)
