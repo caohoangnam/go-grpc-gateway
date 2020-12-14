@@ -41,8 +41,16 @@ func (t *transfersServiceServer) connect(ctx context.Context) (*sql.Conn, error)
 	return c, nil
 }
 
+func Recover(tx *sql.Tx) {
+	if err := recover(); err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+}
+
 // Create Transfers task
 func (t *transfersServiceServer) Create(ctx context.Context, req *v1.CreateTransfersRequest) (*v1.CreateTransfersResponse, error) {
+	fmt.Println("FromAccountId", req.Transfers.FromAccountId, "---> ToAccountId: ", req.Transfers.ToAccountId, "=== Amount: ", req.Transfers.Amount)
 	if err := t.checkAPI(req.Api); err != nil {
 		return nil, err
 	}
@@ -57,30 +65,19 @@ func (t *transfersServiceServer) Create(ctx context.Context, req *v1.CreateTrans
 	if err != nil {
 		return nil, err
 	}
-	defer tx.Rollback()
-
-	// Hanle account
-	fromAccount := t.GetAccountByIdTx(int(req.Transfers.FromAccountId), tx)
-	var balance float64
-	err = fromAccount.Scan(&balance)
-	if err != nil {
-		tx.Rollback()
-		return nil, status.Error(codes.Unknown, "failed to get into From Account-> "+err.Error())
-	}
-	fmt.Println("fromAccount", balance)
+	defer Recover(tx)
 
 	lastInsertId, err := t.CreateTx(req, tx)
 	if err != nil {
 		tx.Rollback()
 		return nil, status.Error(codes.Unknown, "failed to insert into Transfers-> "+err.Error())
 	}
-	fmt.Println("lastInsertId", lastInsertId)
 
 	// Hanlde entries
 	reqEntriesByFromAccount := &v1.CreateEntriesRequest{
 		Entries: &v1.Entries{
 			AccountId: req.Transfers.FromAccountId,
-			Amount:    balance - req.Transfers.Amount,
+			Amount:    req.Transfers.Amount,
 		},
 	}
 	_, err = t.CreateEntriesTx(reqEntriesByFromAccount, tx)
@@ -92,13 +89,22 @@ func (t *transfersServiceServer) Create(ctx context.Context, req *v1.CreateTrans
 	reqEntriesByToAccount := &v1.CreateEntriesRequest{
 		Entries: &v1.Entries{
 			AccountId: req.Transfers.ToAccountId,
-			Amount:    balance - req.Transfers.Amount,
+			Amount:    req.Transfers.Amount,
 		},
 	}
 	_, err = t.CreateEntriesTx(reqEntriesByToAccount, tx)
 	if err != nil {
 		tx.Rollback()
 		return nil, status.Error(codes.Unknown, "failed to insert into Entries by to account-> "+err.Error())
+	}
+
+	// Hanle account
+	fromAccount := t.GetAccountByIdTx(int(req.Transfers.FromAccountId), tx)
+	var balance float64
+	err = fromAccount.Scan(&balance)
+	if err != nil {
+		tx.Rollback()
+		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to get into From Account by %d is Err -> %v ", req.Transfers.FromAccountId, err.Error()))
 	}
 
 	reqFromAccount := &v1.UpdateAccountRequest{
@@ -112,14 +118,15 @@ func (t *transfersServiceServer) Create(ctx context.Context, req *v1.CreateTrans
 		tx.Rollback()
 		return nil, status.Error(codes.Unknown, "failed to update into From Account-> "+err.Error())
 	}
+	fmt.Sprintf("success to update into From Account by %d", req.Transfers.FromAccountId)
 
 	toAccount := t.GetAccountByIdTx(int(req.Transfers.ToAccountId), tx)
 	err = toAccount.Scan(&balance)
 	if err != nil {
 		tx.Rollback()
-		return nil, status.Error(codes.Unknown, "failed to get into to Account-> "+err.Error())
+		return nil, status.Error(codes.Unknown, fmt.Sprintf("failed to get into To Account by %d is Err -> %v ", req.Transfers.ToAccountId, err.Error()))
 	}
-	fmt.Println("toAccount", balance)
+
 	reqToAccount := &v1.UpdateAccountRequest{
 		Account: &v1.Account{
 			Id:      req.Transfers.ToAccountId,
@@ -131,6 +138,7 @@ func (t *transfersServiceServer) Create(ctx context.Context, req *v1.CreateTrans
 		tx.Rollback()
 		return nil, status.Error(codes.Unknown, "failed to update into To Account-> "+err.Error())
 	}
+	fmt.Sprintf("success to update into To Account by %d", req.Transfers.ToAccountId)
 
 	err = tx.Commit()
 	if err != nil {
@@ -155,12 +163,11 @@ func (t *transfersServiceServer) CreateEntriesTx(req *v1.CreateEntriesRequest, t
 	var lastId int
 	sql := `INSERT INTO entries(account_id, amount) VALUES($1, $2) RETURNING id`
 	err := tx.QueryRow(sql, req.Entries.AccountId, req.Entries.Amount).Scan(&lastId)
-	fmt.Println("err", err)
 	return lastId, err
 }
 
 func (t *transfersServiceServer) GetAccountByIdTx(id int, tx *sql.Tx) *sql.Row {
-	sql := `SELECT balance FROM accounts WHERE id = $1 FOR UPDATE`
+	sql := `SELECT balance FROM accounts WHERE id = $1 LIMIT 1 FOR UPDATE`
 	res := tx.QueryRow(sql, id)
 	return res
 }
